@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fe.blog.mapper.homepage.HomePageMapper">
+
+    <insert id="insertHomepage">
+        insert into homepage values (#{homepageid},#{title},#{description},#{welcome},#{banner},#{background})
+    </insert>
+
+    <update id="UpdateHomepage">
+        update homepage set title = #{title},welcome =#{welcome},description = #{description},banner = #{banner},announcement = #{announcement}  where homepageid = #{homepageid};
+    </update>
+
+
+    <delete id="delHomepage">
+
+    </delete>
+
+
+    <select id="findHomepage" resultType="com.fe.blog.bean.Homepage">
+        select * from homepage where homepageid = 1;
+    </select>
+</mapper>

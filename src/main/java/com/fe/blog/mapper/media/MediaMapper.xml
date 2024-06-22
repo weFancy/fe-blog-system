@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fe.blog.mapper.media.MediaMapper">
+
+
+    <select id="findAllImage" resultType="com.fe.blog.bean.Media">
+        select image from media where image is not null ;
+    </select>
+
+    <select id="findAllMusic" resultType="com.fe.blog.bean.Media">
+        select music from media where music is not null ;
+    </select>
+
+    <select id="findImage" resultType="com.fe.blog.bean.Media">
+        select image from media where image=#{image};
+    </select>
+
+    <select id="findMusic" resultType="com.fe.blog.bean.Media">
+        select music from media where music=#{music};
+    </select>
+
+    <insert id="addImage">
+        insert into media(image) values(#{image});
+    </insert>
+
+
+    <insert id="addMusic">
+        insert into media(music) values(#{music});
+    </insert>
+
+    <delete id="deleteImage">
+        delete from media where image=#{image}
+    </delete>
+
+    <delete id="deleteMusic">
+        delete from media where music=#{music}
+    </delete>
+
+</mapper>

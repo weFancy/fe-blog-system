@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fe.blog.mapper.updateusermapper.updateUserMapper">
+
+    <!-- 更改个人信息的方法   -->
+    <select id="updateUser" resultType="com.fe.blog.bean.User">
+        update fe_blog_system.user
+        set
+            email=#{email},
+            nick=#{nick},
+            profile=#{profile},
+            sex=#{sex},
+            birthday=#{birthday},
+            update_time=current_time
+        where account=#{account}
+    </select>
+
+    <!--    更改密码的方法 -->
+    <select id="updateUserPassword" resultType="com.fe.blog.bean.User">
+        update fe_blog_system.user
+        set password=#{password},
+            update_time=current_time
+        where account = #{account}
+    </select>
+
+
+
+    <select resultType="com.fe.blog.bean.User" id="getUserByAccount">
+        select *
+        from fe_blog_system.user
+        where account = #{account}
+    </select>
+
+</mapper>

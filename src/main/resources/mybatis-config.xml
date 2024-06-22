@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties resource="database.properties"/>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <typeAliases>
+        <typeAlias type="com.fe.blog.bean.Comment" alias="Comment"/>
+        <typeAlias type="com.fe.blog.bean.Media" alias="Media"/>
+        <typeAlias type="com.fe.blog.bean.Blog" alias="Blog"/>
+        <typeAlias type="com.fe.blog.bean.BlogTag" alias="BlogTag"/>
+        <typeAlias type="com.fe.blog.bean.Field" alias="Field"/>
+        <typeAlias type="com.fe.blog.bean.Homepage" alias="Homepage"/>
+        <typeAlias type="com.fe.blog.bean.MediaRelation" alias="MediaRelation"/>
+        <typeAlias type="com.fe.blog.bean.Tag" alias="Tag"/>
+        <typeAlias type="com.fe.blog.bean.User" alias="User"/>
+    </typeAliases>
+    <typeHandlers>
+        <typeHandler handler="com.fe.blog.handler.BlobToStringTypeHandler" jdbcType="BLOB" javaType="java.lang.String"/>
+    </typeHandlers>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+       <package name="com/fe/blog/mapper"/>
+    </mappers>
+
+</configuration>

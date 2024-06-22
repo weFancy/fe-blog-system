@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fe.blog.mapper.blog.BlogMapper">
+
+
+    <!--    add Blog and tag-->
+    <insert id="addBlog" parameterType="Blog">
+        insert into blog(title, content, description, type, status, user_id, field_id, author)
+        values(#{title}, #{content}, #{description}, #{type}, 2, #{userId}, #{fieldId}, #{author});
+        <selectKey keyProperty="blogId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="addTag" parameterType="java.lang.String">
+        insert into tag (name) values (#{name});
+    </insert>
+
+    <insert id="addRelation" parameterType="BlogTag">
+        insert into tag_relation (blog_id, tag_id) values (#{blogId}, #{tagId});
+        <selectKey keyProperty="blogId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!--    update Blog and tag-->
+    <update id="updateBlog" parameterType="Blog">
+        update blog set
+                        title = #{title},
+                        content = #{content},
+                        description = #{description},
+                        type = #{type},
+                        deleted = #{deleted},
+                        status = 2,
+                        user_id = #{userId},
+                        field_id = #{fieldId},
+                        author = #{author}
+        where blog_id = #{blogId};
+    </update>
+
+    <!--    delete Blog and tag-->
+    <delete id="deleteBlog">
+        update blog set deleted = 1, status = 3 where blog_id = #{blogId};
+    </delete>
+
+    <delete id="deleteTag">
+        delete from tag where name = #{tag};
+    </delete>
+
+    <select id="fuzzyQuery" resultType="Blog">
+        select * from blog
+        <where>title like "%"#{title}"%"</where>
+        AND deleted = 0
+        AND  user_id = #{userId}
+        limit #{page},#{size}
+    </select>
+
+    <select id="randomQuery" resultType="Blog">
+        SELECT * FROM blog AS t1 JOIN
+        (SELECT ROUND(RAND() * ((SELECT MAX(blog_id) FROM blog) - (SELECT MIN(blog_id) FROM blog)) + (SELECT MIN(blog_id) FROM blog))
+            AS id FROM blog) AS t2 ON t1.blog_id = t2.id
+        AND deleted = 0
+        limit #{page},#{size}
+    </select>
+
+    <select id="selectByBlogLimit" resultType="Blog" parameterType="Blog">
+        select blog_id,title,description,type,create_time,update_time,user_id,field_id,author,status from blog
+        <where> deleted = 0 </where>AND user_id = #{userId} limit #{page},#{size}
+    </select>
+
+    <select id="selectDeletedBlogLimit" resultType="Blog" parameterType="Blog">
+        select blog_id,title,description,type,create_time,update_time,user_id,field_id,author,status from blog
+        <where> deleted = 1 </where>AND user_id = #{userId} limit #{page},#{size}
+    </select>
+
+    <!--    selectAllTag-->
+    <select id="selectTagAll" resultType="Tag">
+        select * from tag;
+    </select>
+
+    <select id="selectByTag" resultType="Tag" >
+        select * from tag where name IN
+        <foreach collection="list" item="name" open="(" separator="," close=")">
+            #{name}
+        </foreach>
+    </select>
+
+    <select id="selectByBlogId" resultType="Blog">
+        select * from blog where title = #{title};
+    </select>
+
+    <select id="selectInBlog" resultType="Blog">
+        select * from blog where blog_id = #{blogId};
+    </select>
+
+    <update id="deleteBlogTag" parameterType="BlogTag">
+        update tag_relation set deleted = 1 <where>
+        blog_id = #{blogId}
+    </where>
+    </update>
+
+    <select id="selectblogbytag" resultType="com.fe.blog.bean.Blog">
+        select * from blog where blog_id in
+        (select blog_id from tag_relation
+            where tag_id in
+            (select tag_id from tag where name = #{tagname}) and deleted = 0 )
+    </select>
+</mapper>

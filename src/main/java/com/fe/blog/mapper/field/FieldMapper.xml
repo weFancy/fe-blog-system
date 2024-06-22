@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fe.blog.mapper.field.FieldMapper">
+
+    <insert id="addFieldTag">
+        insert into field(name) values(#{field});
+    </insert>
+
+    <delete id="deleteFieldTag">
+        delete from field where field_id = (#{field});
+    </delete>
+
+    <select id="findAllFieldTag" resultType="com.fe.blog.bean.Field">
+    select * from field;
+    </select>
+
+    <select id="selectFieldTag" resultType="java.lang.Integer">
+    select field_id from field where name = (#{Fieldtag});
+    </select>
+
+    <select id="selectByField" resultType="com.fe.blog.bean.Field">
+    select field_id from field where name = #{field};
+    </select>
+
+    <select id="selectBlogbyField" resultType="com.fe.blog.bean.Blog" parameterType="Blog">
+    select * from blog where field_id = #{Fieldid}
+    AND user_id = #{Userid}
+    limit #{page},#{size};
+    </select>
+    <select id="selectBlogbytitle" resultType="com.fe.blog.bean.Blog" parameterType="Blog">
+        select * from blog   <where>title like "%"#{param3}"%"</where>
+        AND field_id = #{param1}
+        AND user_id = #{param2}
+        limit #{page},#{size};
+    </select>
+
+</mapper>
